@@ -1,0 +1,15 @@
+#install docker
+#install postman
+
+#run docker 
+docker build -t agusgpt .
+docker run -p 5000:5000 agusgpt
+docker run -e "OPENAI_API_KEY=your_api_key_here" -p 5000:5000 agusgpt
+
+
+#run postman
+config POST  http://localhost:5000/agusgpt
+config body raw json 
+{
+    "number": 9
+}

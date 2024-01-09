@@ -1,0 +1,18 @@
+
+January 2024
+
+notes: 
+removed custom functions
+
+
+database for later
+
+image generation with dalle 3
+dalle 3 starting point, later transition to midjourney, later to stable-diffusion (cost optimization)
+
+
+* endpoint to database : custom ownership
+    -chatgpt instructed to "store" as a new function
+    -any time "store" function is invoked chatgpt will store new information to the database
+    -many identifiers for what "new" information is
+    -when chatgpt determines it cannot know this new information it should attempt to retrieve the field from the database making a query
