@@ -1,6 +1,7 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, make_response
 from flask_cors import CORS, cross_origin
-from loopimg import run_conversation
+from loopimg import gen_image
+from loopchat import run_conversation
 from config import config
 import os
 
@@ -25,16 +26,23 @@ messages = []
 @cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
 def initialize():
     api_key = request.json.get('api_key')
-    config.set_api_key(api_key)
-    return jsonify({"status": "initialized", "message": "API key set successfully"})
+    if api_key is not None:
+        config.set_api_key(api_key)
+        return jsonify({"status": "initialized", "message": "API key set successfully"})
+    else:
+        return jsonify({"status": "failed", "message": "API key not found"}) 
 
 @app.route('/selfstart', methods=['POST'])
 # Header authorization attributes from CORS
 @cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
 def selfstart():
     api_key = os.getenv("OPENAI_API_KEY")
-    config.set_api_key(api_key)
-    return jsonify({"status": "initialized", "message": "API key set successfully"})
+    if api_key is not None:
+        config.set_api_key(api_key)
+        return jsonify({"status": "initialized", "message": "API key set successfully"})
+    else:
+        return jsonify({"status": "failed", "message": "API key not found"})    
+    
 
 @app.route('/chat', methods=['POST'])
 @cross_origin(origin='*', headers=['Content-Type', 'application/json'])
@@ -56,15 +64,15 @@ def chat():
 def img():
     if not config.get_api_key():
         return jsonify({"error": "API key not initialized"}), 401  # Unauthorized
-    global messages
     data = request.get_json()
     input = data.get('input',0)
     if input.lower() in ['quit', 'exit', 'bye']:
-        response = "Chat ended. Goodbye!"
-        messages = []  # Reset messages
+        response = "<p>Image not found</p>"
     else:
-        response, messages = run_conversation(input, messages)
-    return jsonify({"response": response, "history": messages})
+        response = gen_image(input)
+        response = f"<img src='{response}' alt='Generated Image'>"
+    
+    return make_response(response)
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0",port=5000)

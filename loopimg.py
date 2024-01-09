@@ -13,7 +13,7 @@ def gen_image(user_input):
         model="dall-e-3",
         prompt=user_input,
         n=1,
-        size="1792x1024",
+        size="1024x1024",
     )
     return myimage.data[0]
 
