@@ -18,7 +18,7 @@ CORS(app, resources={r"/*": {"origins": ["http://127.0.0.1:5500"]}}, supports_cr
 
 
 # Global variable to store messages
-messages = []
+messages = [{"role": "system", "content": "You are a helpful assistant."}]
 #config.set_api_key(None)
 
 @app.route('/initialize', methods=['POST'])
@@ -75,4 +75,4 @@ def img():
     return make_response(response)
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0",port=5000)
+    app.run(host="0.0.0.0",port=5001)

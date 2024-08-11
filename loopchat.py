@@ -12,7 +12,7 @@ def run_conversation(user_input, messages):
         openai.api_key = config.get_api_key()
     messages.append({"role": "user", "content": user_input})
     response = openai.chat.completions.create(
-        model="gpt-3.5-turbo-1106",
+        model="gpt-4o",
         messages=messages,
         #functions=cf.schema,
         #function_call="auto",
